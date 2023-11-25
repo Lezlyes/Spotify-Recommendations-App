@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'log_in.dart';
 import 'dart:developer' as devLog;
 
+// The main class, starts the app
 void main() {
   runApp(const MyApp());
 }
@@ -16,10 +17,7 @@ class MyApp extends StatelessWidget {
     devLog.log('Log is working');
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
-      ),
+      theme: ThemeData.dark(),
       home: MyHomePage(),
     );
   }
@@ -30,8 +28,9 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black87,
       appBar: AppBar(
-        title: const Text('Spotify Recommendation App'),
+        title: const Text('Spotify Recommendations', style: TextStyle(fontSize:20)),
         backgroundColor: Colors.green,
+        toolbarHeight: 50,
       ),
       body: Center(
 
@@ -47,9 +46,8 @@ class MyHomePage extends StatelessWidget {
               );
             }
         ),
-      ), // This trailing comma makes auto-formatting nicer f
+      ),
     );
   }
 
 }
-

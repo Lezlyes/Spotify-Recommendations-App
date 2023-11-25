@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:spotify_rec_sp29_green/fetch.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -26,6 +27,7 @@ class _LogIn extends State<LogIn> {
   late final WebViewController controller;
   late BuildContext context;
   Map<String, dynamic> userData = {};
+  Map<String, dynamic> userTop = {};
 
   @override
   void initState() {
@@ -41,7 +43,7 @@ class _LogIn extends State<LogIn> {
               final host = url.host;
               if (host.startsWith('localhost')) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text(
                       'Logging you in...',
                     ),
@@ -54,15 +56,20 @@ class _LogIn extends State<LogIn> {
                 authenticate.createAuthUri(code!);
                 final accessToken = await secureStorage.read(key: 'access_token');
                 final userM = await authenticate.getUserProfile(accessToken!);
-                userData = userM;
+                userData =  userM;
 
+                final userT = await Fetch.getTopItems('artists', 'short_term');
+                userTop =  userT;
+
+                if(userData.isNotEmpty && userTop.isNotEmpty) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(userData: userData, userTop: userTop,),
+                    ),
+                  );
+                }
                 // Navigate to the next page here
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(userData: userData),
-                  ),
-                );
 
                 return NavigationDecision.prevent;
               }
@@ -81,7 +88,8 @@ class _LogIn extends State<LogIn> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('Log in to begin using the app'),
+        toolbarHeight: 50,
+        title: const Text('Log in to Spotify', style: TextStyle(fontSize:20)),
       ),
       body: WebViewWidget(
         controller: controller,
@@ -97,7 +105,7 @@ class authenticate {
   static const String clientId = '1db59d18ef994706bcd15831db1067a4';
   static const String redirectUri = 'http://localhost:5040'
       '/callback';
-  static const String scope = 'user-read-private user-read-email';
+  static const String scope = 'user-read-private user-read-email user-top-read';
   static String codeVerifier = ""; // will be set to a random String
 
 
@@ -194,6 +202,27 @@ class authenticate {
       return responseData;
     } else {
       devLog.log('Error: failed to fetch user profile');
+      devLog.log('Error: HTTP status ${response.statusCode}');
+      devLog.log('Error: HTTP reason ${response.reasonPhrase}: ${response.body}');
+      throw Exception('Failed to fetch user profile');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getTopTracks(String accessToken) async {
+    final Uri tracksUri = Uri.parse('https://api.spotify.com/v1/me/top/artists');
+    final response = await http.get(
+      tracksUri,
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      devLog.log('Validated code 200');
+      final topTracks = json.decode(response.body);
+      return topTracks;
+    } else {
+      devLog.log('Error: failed to fetch user top tracks');
       devLog.log('Error: HTTP status ${response.statusCode}');
       devLog.log('Error: HTTP reason ${response.reasonPhrase}: ${response.body}');
       throw Exception('Failed to fetch user profile');
