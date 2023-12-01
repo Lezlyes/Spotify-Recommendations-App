@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_rec_sp29_green/fetch.dart'; // Import your fetch file
+import 'package:spotify_rec_sp29_green/fetch.dart';
 import 'package:spotify_rec_sp29_green/recommendations_list.dart';
-
 import 'homepage.dart';
 
 // The page that allows the user to choose values for recommendations
@@ -100,7 +99,6 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
                   padding: EdgeInsets.all(10), backgroundColor: getAccentColor(),
                 ),
                 onPressed: () async {
-                  // Call your fetch method here with the selected values and artistIds
                   final recommendations = await Fetch.getRecommendations(
                     instrumentalness: instrumentalness,
                     happiness: happiness,
@@ -114,7 +112,6 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
                       builder: (context) => RecommendationsList(recommendations: recommendations, type: 'tracks'),
                     ),
                   );
-                  // Navigate to the page where you want to display recommendations
                 },
                 child: const Text('Get Recommendations'),
               ),

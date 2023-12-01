@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:developer' as devLog;
-
 import 'log_in.dart';
 
 // A helper class for making various API calls
@@ -38,19 +37,15 @@ class Fetch {
   }) async {
     final accessToken = await secureStorage.read(key: 'access_token');
 
-    // Prepare seed parameters
     String? seedArtists = artistSeeds.isNotEmpty ? artistSeeds.join(',') : null;
-    String? seedGenres = genreSeeds.isNotEmpty ? genreSeeds.join(',') : null;
     final Uri recommendationsUri = Uri.parse('https://api.spotify.com/v1/recommendations?'
         'seed_artists=$seedArtists&'
-        //'seed_genres=$seedGenres&'
         'target_valence=$happiness&'
         'target_instrumentalness=$instrumentalness&'
         'target_popularity=${(popularity * 100).round()}');
 
     devLog.log('https://api.spotify.com/v1/recommendations?'
         'seed_artists=$seedArtists&'
-    //'seed_genres=$seedGenres&'
         'target_valence=$happiness&'
         'target_instrumentalness=$instrumentalness&'
         'target_popularity=${(popularity * 100).round()}');

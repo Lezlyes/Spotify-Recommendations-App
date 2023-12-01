@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:spotify_rec_sp29_green/fetch.dart';
@@ -69,8 +68,6 @@ class _LogIn extends State<LogIn> {
                     ),
                   );
                 }
-                // Navigate to the next page here
-
                 return NavigationDecision.prevent;
               }
               return NavigationDecision.navigate;
@@ -109,7 +106,7 @@ class authenticate {
   static String codeVerifier = ""; // will be set to a random String
 
 
-// Generates a random String, which is necessary for Spotify OAuth
+  // Generates a random String, which is necessary for Spotify OAuth
   static String _generateRandomString(int length) {
     const String possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     devLog.log('Validated random String creation');
@@ -179,14 +176,13 @@ class authenticate {
       final responseData = json.decode(response.body);
       final accessToken = responseData['access_token'];
       await secureStorage.write(key: 'access_token', value: accessToken);
-
-      // Store the access token wherever needed
     } else {
       devLog.log('Error: HTTP status ${response.statusCode}');
       devLog.log('Error: HTTP reason ${response.reasonPhrase}: ${response.body}');
     }
   }
 
+  // Get the user profile iformation
   static Future<Map<String, dynamic>> getUserProfile(String accessToken) async {
     final Uri profileUri = Uri.parse('https://api.spotify.com/v1/me');
     final response = await http.get(
@@ -208,6 +204,7 @@ class authenticate {
     }
   }
 
+  // Get the user's top artists
   static Future<Map<String, dynamic>> getTopTracks(String accessToken) async {
     final Uri tracksUri = Uri.parse('https://api.spotify.com/v1/me/top/artists');
     final response = await http.get(

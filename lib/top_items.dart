@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'homepage.dart';
 
 // The page for displaying either the user's top artists or top tracks
@@ -27,7 +26,7 @@ class _TopItemsState extends State<TopItems> {
   @override
   void initState() {
     super.initState();
-    userTop = widget.userTopSix; // Set the default time range to six months
+    userTop = widget.userTopSix; // Sets the default time range to six months
   }
 
   @override
@@ -46,7 +45,7 @@ class _TopItemsState extends State<TopItems> {
           children: [
             Row(
               children: [
-                Text('These are your top ${widget.type}'),
+                Text('    These are your top ${widget.type}'),
                 Spacer(),
                 DropdownButton<String>(
                   value: getUserTopTitle(userTop),
@@ -130,6 +129,7 @@ class _TopItemsState extends State<TopItems> {
     );
   }
 
+  // Get the title for the dropdown button
   String getUserTopTitle(Map<String, dynamic> userTop) {
     if (userTop == widget.userTopMonth) {
       return '1 month';

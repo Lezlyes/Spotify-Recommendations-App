@@ -1,5 +1,3 @@
-//import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:spotify_rec_sp29_green/fetch.dart';
 import 'package:spotify_rec_sp29_green/main.dart';
@@ -29,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   static Color primary = Colors.black38;
   static Color accent = Colors.green;
 
+  // Method for updating accent and primary colors of the app
   void _updateTheme(Color newPrimary, Color newAccent) {
     setState(() {
       accent = newAccent;
@@ -39,7 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // JsonEncoder encoder = const JsonEncoder.withIndent('  '); // Create a JSON encoder with indentation
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
